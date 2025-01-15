@@ -1,120 +1,119 @@
 
-# PrestaShop Development Environment
+# **Environnement de Développement PrestaShop**
 
-This repository provides a complete setup for a PrestaShop development environment using Docker. The setup includes multiple components including MySQL, PrestaShop, Loki, Promtail, and Grafana for log analysis.
-
+Ce dépôt fournit une configuration complète pour un environnement de développement PrestaShop utilisant Docker. La configuration inclut plusieurs composants, notamment MySQL, PrestaShop, Loki, Promtail et Grafana pour l'analyse des journaux.
 ## Demo
 
 [![Watch the video](https://img.youtube.com/vi/-I7AREvHALY/default.jpg)](https://youtu.be/-I7AREvHALY)
 
-At the end, when everything is running you should have this:
-
+À la fin, lorsque tout est en fonctionnement, vous devriez obtenir ceci :
 ![alt text](19222828.png)
 
-## Prerequisites
+## Prérequis
 
-- Ensure you have Docker and Docker Compose installed on your machine.
-- Download a version of Prestashop and update the Dockerfile.devel
-- Create necessary folders for Grafana, Loki,...
+- Assurez-vous d'avoir Docker et Docker Compose installés sur votre machine.  
+- Téléchargez une version de PrestaShop et mettez à jour le fichier `Dockerfile.devel`.  
+- Créez les dossiers nécessaires pour Grafana, Loki, etc.  
 
-## Setup Instructions
+## Instructions d'installation
 
-### Building the Base and Development Containers
+### Construction des conteneurs de base et de développement  
 
-1. Clone this repository.
-2. Customize `Dockerfile.devel` to install a different version of PrestaShop or other dependencies if needed.
-3. Build the Docker images using the provided `docker.sh` script:
+1. Clonez ce dépôt.  
+2. Personnalisez le fichier `Dockerfile.devel` pour installer une version différente de PrestaShop ou d'autres dépendances si nécessaire.  
+3. Construisez les images Docker en utilisant le script `docker.sh` fourni :
+
 
    ```sh
    ./docker.sh build
    ```
 
-### Running the Development Environment
+### Lancement de l'environnement de développement  
 
-1. Start the development environment:
+1. Démarrez l'environnement de développement :  
 
    ```sh
    ./docker.sh up
    ```
 
-### SSH Access to the Base Container
+### Accès SSH au conteneur de base  
 
-The base container is set up with OpenSSH server and allows SSH access using public key authentication. Ensure your public key is added to the container.
+Le conteneur de base est configuré avec un serveur OpenSSH et permet un accès SSH en utilisant l'authentification par clé publique. Assurez-vous que votre clé publique est ajoutée au conteneur.  
 
-## Configuration Details
+## Détails de la configuration  
 
-### Dockerfile.base
+### Dockerfile.base  
 
-This Dockerfile sets up the base container with all necessary dependencies and tools except PrestaShop. It includes configurations for PHP, SSH, and other essential tools.
+Ce fichier Docker configure le conteneur de base avec toutes les dépendances et outils nécessaires, à l'exception de PrestaShop. Il inclut les configurations pour PHP, SSH et d'autres outils essentiels.  
 
-### Dockerfile.devel
+### Dockerfile.devel  
 
-This Dockerfile sets up the development container, adding PrestaShop and other necessary configurations for a development environment.
+Ce fichier Docker configure le conteneur de développement, ajoutant PrestaShop et les autres configurations nécessaires pour un environnement de développement.  
 
-### docker-compose.yml
+### docker-compose.yml  
 
-This file defines the services and configurations for Docker Compose, including the PrestaShop service, MySQL database, Loki, Promtail, and Grafana for log analysis.
+Ce fichier définit les services et configurations pour Docker Compose, y compris le service PrestaShop, la base de données MySQL, Loki, Promtail et Grafana pour l'analyse des journaux.  
 
-## Log Analysis with Grafana and Loki
+## Analyse des journaux avec Grafana et Loki  
 
-This setup includes Grafana for visualizing logs and Loki as a log aggregation system. Promtail is used to collect logs from various sources.
+Cette configuration inclut Grafana pour la visualisation des journaux et Loki comme système d'agrégation de journaux. Promtail est utilisé pour collecter les journaux à partir de différentes sources.  
 
-### Services
+### Services  
 
-- **MySQL**: Database service for PrestaShop.
-- **PrestaShop**: The main application service.
-- **Loki**: A log aggregation system.
-- **Promtail**: An agent that ships the contents of the logs to Loki.
-- **Grafana**: A platform for monitoring and observability.
+- **MySQL** : Service de base de données pour PrestaShop.  
+- **PrestaShop** : Le service principal de l'application.  
+- **Loki** : Système d'agrégation des journaux.  
+- **Promtail** : Agent qui envoie le contenu des journaux à Loki.  
+- **Grafana** : Plateforme de surveillance et d'observabilité.  
 
-### Grafana Setup
+### Configuration de Grafana  
 
-1. Grafana is available at `http://localhost:3000`.
-2. Default authentication is disabled, and anonymous access is enabled with Admin role. You can customize this in the `docker-compose.yml` file if needed.
-3. Logs from Apache and PrestaShop are collected and displayed in Grafana dashboards.
+1. Grafana est accessible à l'adresse `http://localhost:3000`.  
+2. L'authentification par défaut est désactivée et l'accès anonyme est activé avec un rôle Admin. Vous pouvez personnaliser ce paramètre dans le fichier `docker-compose.yml` si nécessaire.  
+3. Les journaux d'Apache et de PrestaShop sont collectés et affichés dans les tableaux de bord de Grafana.  
 
-### Configuration Files
+### Fichiers de configuration  
 
-- **loki-config.yaml**: Configuration for Loki.
-- **promtail-config.yml**: Configuration for Promtail to specify which logs to collect and ship to Loki.
+- **loki-config.yaml** : Configuration pour Loki.  
+- **promtail-config.yml** : Configuration pour Promtail, spécifiant quels journaux collecter et envoyer à Loki.  
 
-### Starting the Log Analysis Stack
+### Démarrage de la pile d'analyse des journaux  
 
-1. Start the stack using Docker Compose:
+1. Lancez la pile à l'aide de Docker Compose :  
 
    ```sh
    docker-compose up -d
-   ```
+   ```  
 
-2. Access Grafana at `http://localhost:3000` to start visualizing your logs.
+2. Accédez à Grafana à l'adresse `http://localhost:3000` pour commencer à visualiser vos journaux.  
 
-### Directory Structure
+### Structure des répertoires  
 
-- `config/`: Contains configuration files for MySQL and other services.
-- `init-scripts/`: Initialization scripts for setting up the environment.
-- `logs/`: Directory to store logs from Apache and PrestaShop.
-- `modules/`: Custom PrestaShop modules for development.
-- `grafana/`: Persistent storage for Grafana configurations and dashboards.
-- `provisioning/`: Grafana provisioning configuration for data sources and dashboards.
+- `config/` : Contient les fichiers de configuration pour MySQL et d'autres services.  
+- `init-scripts/` : Scripts d'initialisation pour configurer l'environnement.  
+- `logs/` : Répertoire pour stocker les journaux d'Apache et de PrestaShop.  
+- `modules/` : Modules personnalisés de PrestaShop pour le développement.  
+- `grafana/` : Stockage persistant pour les configurations et tableaux de bord de Grafana.  
+- `provisioning/` : Configuration de provisionnement pour les sources de données et tableaux de bord Grafana.  
 
-### Example Commands
+### Commandes d'exemple  
 
-To build and run the Docker containers:
+Pour construire et exécuter les conteneurs Docker :  
 
 ```sh
 ./docker.sh build
 ./docker.sh up
 ```
 
-## Notes
+## Notes  
 
-- Ensure your public SSH key is correctly added to the configuration for SSH access.
-- Adjust any environment variables as necessary in the `docker-compose.yml` file.
+- Assurez-vous que votre clé SSH publique est correctement ajoutée à la configuration pour un accès SSH.  
+- Ajustez les variables d'environnement si nécessaire dans le fichier `docker-compose.yml`.  
 
-## Useful Links
+## Liens utiles  
 
-- [PHP Remote Debugging with VSCode](https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d)
-- [PrestaShop Console Commands](https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md)
-- [Module Bootstrap](https://github.com/friends-of-presta/demo-cqrs-hooks-usage-module)
-- [Logio](http://logio.org/)
-- [Creating Console Commands in PrestaShop 1.7](https://webkul.com/blog/create-your-own-console-command-in-prestashop-1-7/)
+- [Débogage à distance PHP avec VSCode](https://ramyhakam.medium.com/php-remote-debugging-with-vscode-a-comprehensive-guide-f20e67000b7d)  
+- [Commandes console PrestaShop](https://github.com/nenes25/prestashop_console/blob/1.7/COMMANDS.md)  
+- [Bootstrap pour module](https://github.com/friends-of-presta/demo-cqrs-hooks-usage-module)  
+- [Logio](http://logio.org/)  
+- [Création de commandes console dans PrestaShop 1.7](https://webkul.com/blog/create-your-own-console-command-in-prestashop-1-7/)  
